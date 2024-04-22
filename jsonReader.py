@@ -13,15 +13,16 @@ highOpen = data["openness"]["highTrait"]
 
 listOfDiffs = {}
 for pTrait in data:
-  for ratingLevel in data[pTrait]["lowTrait"]:
-    for popularityLevel in data[pTrait]["lowTrait"][ratingLevel]:
-      for genre in data[pTrait]["lowTrait"][ratingLevel][popularityLevel]:
-        try:
-          listOfDiffs[str(pTrait + " " + ratingLevel + " " + popularityLevel + " " + genre)] = (data[pTrait]["highTrait"][ratingLevel][popularityLevel][genre] - data[pTrait]["lowTrait"][ratingLevel][popularityLevel][genre])
-        except:
-          listOfDiffs[str(pTrait + " " + ratingLevel + " " + popularityLevel + " " + genre)] = -1
+  for traitLevel in data[pTrait]:
+    if traitLevel != "moderateTrait":
+      for ratingLevel in data[pTrait][traitLevel]:
+        for popularityLevel in data[pTrait][traitLevel][ratingLevel]:
+          for genre in data[pTrait][traitLevel][ratingLevel][popularityLevel]:
+            try:
+              listOfDiffs[str(pTrait + " " + ratingLevel + " " + popularityLevel + " " + genre)] = abs(data[pTrait][traitLevel][ratingLevel][popularityLevel][genre] - data[pTrait]["moderateTrait"][ratingLevel][popularityLevel][genre])
+            except:
+              listOfDiffs[str(pTrait + " " + ratingLevel + " " + popularityLevel + " " + genre)] = -1
 
 keysOfSortedDict = sorted(listOfDiffs, key=listOfDiffs.get, reverse=True)
 for key in keysOfSortedDict:
-  if "consc" in key:
-    print(key, listOfDiffs[key])
+  print(key, listOfDiffs[key])
